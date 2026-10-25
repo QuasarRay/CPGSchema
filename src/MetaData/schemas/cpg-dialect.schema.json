@@ -1,0 +1,452 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/dialect/2026-10",
+  "$dynamicAnchor": "meta",
+  "$vocabulary": {
+    "https://json-schema.org/draft/2020-12/vocab/core": true,
+    "https://json-schema.org/draft/2020-12/vocab/applicator": true,
+    "https://json-schema.org/draft/2020-12/vocab/unevaluated": true,
+    "https://json-schema.org/draft/2020-12/vocab/validation": true,
+    "https://json-schema.org/draft/2020-12/vocab/meta-data": true,
+    "https://json-schema.org/draft/2020-12/vocab/format-annotation": true,
+    "https://json-schema.org/draft/2020-12/vocab/content": true,
+    "https://shiftleft.io/codepropertygraph/schema/vocab/core/2026-10": true
+  },
+  "allOf": [
+    {
+      "$ref": "https://json-schema.org/draft/2020-12/schema"
+    }
+  ],
+  "properties": {
+    "cpg:moduleName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:docIndex": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "cpg:providedByFrontend": {
+      "type": "boolean"
+    },
+    "cpg:imports": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "cpg:properties": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/cpgProperty"
+      }
+    },
+    "cpg:nodeBaseTypes": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/cpgNodeBaseType"
+      }
+    },
+    "cpg:nodeTypes": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/cpgNodeType"
+      }
+    },
+    "cpg:edgeTypes": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/cpgEdgeType"
+      }
+    },
+    "cpg:constantCategories": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/cpgConstantCategory"
+      }
+    }
+  },
+  "required": [
+    "cpg:moduleName",
+    "cpg:docIndex",
+    "cpg:providedByFrontend"
+  ],
+  "$defs": {
+    "cpgProtoId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpgPropertyRef": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpgProperty": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "string",
+            "boolean",
+            "integer",
+            "number",
+            "array"
+          ]
+        },
+        "items": {
+          "type": "object"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": true,
+        "cpg:mandatory": {
+          "type": "boolean"
+        },
+        "cpg:valueType": {
+          "enum": [
+            "String",
+            "Boolean",
+            "Byte",
+            "Short",
+            "Int",
+            "Long",
+            "Float",
+            "Double",
+            "Char"
+          ]
+        },
+        "cpg:cardinality": {
+          "enum": [
+            "optional",
+            "mandatory",
+            "list"
+          ]
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/cpgProtoId"
+        }
+      },
+      "required": [
+        "type",
+        "description",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "cpg:mandatory": {
+                "const": true
+              }
+            },
+            "required": [
+              "cpg:mandatory"
+            ]
+          },
+          "then": {
+            "required": [
+              "default"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "cpg:cardinality": {
+                "const": "mandatory"
+              }
+            },
+            "required": [
+              "cpg:cardinality"
+            ]
+          },
+          "then": {
+            "required": [
+              "default"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "cpg:cardinality": {
+                "const": "list"
+              }
+            },
+            "required": [
+              "cpg:cardinality"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "array"
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "string"
+              }
+            },
+            "required": [
+              "default"
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "boolean"
+              }
+            },
+            "required": [
+              "default"
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "integer"
+              }
+            },
+            "required": [
+              "default"
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "default"
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cpgNodeBaseType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "cpg:properties": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "description",
+        "cpg:properties"
+      ],
+      "additionalProperties": false
+    },
+    "cpgNodeType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/cpgProtoId"
+        },
+        "cpg:propertyRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cpgPropertyRef"
+          }
+        }
+      },
+      "required": [
+        "description",
+        "cpg:protoId",
+        "cpg:propertyRefs"
+      ],
+      "additionalProperties": false
+    },
+    "cpgEdgeType": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/cpgProtoId"
+        }
+      },
+      "required": [
+        "description",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false
+    },
+    "cpgConstant": {
+      "type": "object",
+      "properties": {
+        "cpg:name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "string",
+            "boolean",
+            "integer",
+            "number"
+          ]
+        },
+        "const": true,
+        "description": {
+          "type": "string"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/cpgProtoId"
+        }
+      },
+      "required": [
+        "cpg:name",
+        "type",
+        "const",
+        "description",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "string"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "boolean"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "integer"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "number"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cpgConstantCategory": {
+      "type": "object",
+      "properties": {
+        "$comment": {
+          "type": "string"
+        },
+        "cpg:constants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/cpgConstant"
+          }
+        }
+      },
+      "required": [
+        "cpg:constants"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,1803 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/ast/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/modules/ast/2026-10",
+  "title": "Ast",
+  "description": "The Abstract Syntax Tree (AST) Layer provides syntax trees for all compilation units.\nAll nodes of the tree inherit from the same base class (`AST_NODE`) and are connected\nto their child nodes via outgoing `AST` edges.\n\nSyntax trees are typed, that is, when possible, types for all expressions are stored\nin the tree. Moreover, common control structure types are defined in the specification,\nmaking it possible to translate trees into corresponding control flow graphs if only\nthese common control structure types are used, possibly by desugaring on the side of\nthe language frontend. For cases where this is not an option,\nthe AST specification provides means of storing language-dependent information in the\nAST that can be interpreted by language-dependent control flow construction passes.\n\nThis layer MUST be created by the frontend.\n",
+  "cpg:moduleName": "Ast",
+  "cpg:docIndex": 7,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base",
+    "Namespace",
+    "Method",
+    "Type",
+    "FileSystem"
+  ],
+  "cpg:externals": [
+    "Base::property::CODE",
+    "FileSystem::property::LINE_NUMBER",
+    "FileSystem::property::COLUMN_NUMBER",
+    "FileSystem::property::OFFSET",
+    "FileSystem::property::OFFSET_END",
+    "Method::node::METHOD",
+    "Method::node::METHOD_PARAMETER_IN",
+    "Method::node::METHOD_PARAMETER_OUT",
+    "Type::node::TYPE_DECL",
+    "Type::node::MEMBER",
+    "Type::node::TYPE_PARAMETER",
+    "Type::node::TYPE_ARGUMENT",
+    "FileSystem::node::FILE",
+    "Namespace::node::NAMESPACE_BLOCK",
+    "Type::property::TYPE_FULL_NAME",
+    "Base::nodeBase::DECLARATION",
+    "Base::property::NAME",
+    "Base::property::PARSER_TYPE_NAME",
+    "Type::node::TYPE",
+    "Method::node::METHOD_RETURN",
+    "Namespace::node::NAMESPACE",
+    "Method::property::SIGNATURE",
+    "Base::edge::REF"
+  ],
+  "cpg:operations": [
+    {
+      "kind": "property",
+      "name": "ORDER",
+      "type": "integer",
+      "description": "This integer indicates the position of the node among\nits siblings in the AST. The left-most child has an\norder of 0.",
+      "cpg:valueType": "Int",
+      "cpg:mandatory": true,
+      "default": -1,
+      "cpg:protoId": "Order"
+    },
+    {
+      "kind": "nodeBase",
+      "name": "AST_NODE",
+      "description": "This is the base type for all nodes of the abstract syntax tree (AST). An AST\nnode has a `CODE` and an `ORDER` field. The `CODE` field contains the\ncode (verbatim) represented by the AST node. The `ORDER` field contains the\nnodes position among its siblings, encoded as an integer where the left most\nsibling has the position `0`.\n\nAST nodes contain optional `LINE_NUMBER` and `COLUMN_NUMBER` fields. For\nsource-based frontends, these fields contain the start line number and\nstart column number of the code represented by the node.\nFor machine-code-based and bytecode-based frontends, `LINE_NUMBER` contains\nthe address at which the code starts while `COLUMN_NUMBER` is undefined.\n\nThe optional `OFFSET` and `OFFSET_END` specify the start\nand exclusive end position of the code belonging to a node within the corresponding\n`FILE` nodes `CONTENT` property.",
+      "cpg:propertyRefs": [
+        "Ast::property::ORDER",
+        "Base::property::CODE",
+        "FileSystem::property::LINE_NUMBER",
+        "FileSystem::property::COLUMN_NUMBER",
+        "FileSystem::property::OFFSET",
+        "FileSystem::property::OFFSET_END"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Method::node::METHOD",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Method::node::METHOD_PARAMETER_IN",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Method::node::METHOD_PARAMETER_OUT",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Type::node::TYPE_DECL",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Type::node::MEMBER",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Type::node::TYPE_PARAMETER",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Type::node::TYPE_ARGUMENT",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "FileSystem::node::FILE",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Namespace::node::NAMESPACE_BLOCK",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "BLOCK",
+      "description": "This node represents a compound statement. Compound statements are used in many languages to allow\ngrouping a sequence of statements. For example, in C and Java, compound statements\nare statements enclosed by curly braces. Function/Method bodies are compound\nstatements. We do not use the term \"compound statement\" because \"statement\" would\nimply that the block does not yield a value upon evaluation, that is, that it is\nnot an expression. This is true in languages such as C and Java, but not for languages\nsuch as Scala where the value of the block is given by that of the last expression it\ncontains. In fact, the Scala grammar uses the term \"BlockExpr\" (short for\n\"block expression\") to describe what in the CPG we call \"Block\".",
+      "cpg:protoId": "Block",
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "LITERAL",
+      "description": "This node represents a literal such as an integer or string constant. Literals\nare symbols included in the code in verbatim form and which are immutable.\nThe `TYPE_FULL_NAME` field stores the literal's fully-qualified type name,\ne.g., `java.lang.Integer`.",
+      "cpg:protoId": "Literal",
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME"
+      ],
+      "cpg:primaryKeyRef": "Base::property::CODE"
+    },
+    {
+      "kind": "node",
+      "name": "LOCAL",
+      "description": "This node represents a local variable. Its fully qualified type name is stored\nin the `TYPE_FULL_NAME` field and its name in the `NAME` field. The `CODE` field\ncontains the entire local variable declaration without initialization, e.g., for\n`int x = 10;`, it contains `int x`.",
+      "cpg:protoId": "Local",
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME"
+      ],
+      "cpg:extends": [
+        "Base::nodeBase::DECLARATION",
+        "Ast::nodeBase::AST_NODE"
+      ],
+      "cpg:primaryKeyRef": "Base::property::NAME"
+    },
+    {
+      "kind": "node",
+      "name": "IDENTIFIER",
+      "description": "This node represents an identifier as used when referring to a variable by name.\nIt holds the identifier's name in the `NAME` field and its fully-qualified type\nname in `TYPE_FULL_NAME`.",
+      "cpg:protoId": "Identifier",
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME",
+        "Base::property::NAME"
+      ],
+      "cpg:primaryKeyRef": "Base::property::NAME"
+    },
+    {
+      "kind": "property",
+      "name": "CANONICAL_NAME",
+      "type": "string",
+      "description": "This field holds the canonical name of a `FIELD_IDENTIFIER`. It is typically\nidentical to the CODE field, but canonicalized according to source language\nsemantics. Human readable names are preferable. `FIELD_IDENTIFIER` nodes must\nshare identical `CANONICAL_NAME` if and\nonly if they alias, e.g., in C-style unions (if the aliasing relationship is\nunknown or there are partial overlaps, then one must make a reasonable guess,\nand trade off between false negatives and false positives).",
+      "cpg:valueType": "String",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "CanonicalName"
+    },
+    {
+      "kind": "node",
+      "name": "FIELD_IDENTIFIER",
+      "description": "This node represents the field accessed in a field access, e.g., in\n`a.b`, it represents `b`. The field name as it occurs in the code is\nstored in the `CODE` field. This may mean that the `CODE` field holds\nan expression. The `CANONICAL_NAME` field MAY contain the same value is\nthe `CODE` field but SHOULD contain the normalized name that results\nfrom evaluating `CODE` as an expression if such an evaluation is\npossible for the language frontend. The objective is to store an identifier\nin `CANONICAL_NAME` that is the same for two nodes iff they refer to the\nsame field, regardless of whether they use the same expression to reference\nit.",
+      "cpg:protoId": "FieldIdentifier",
+      "cpg:propertyRefs": [
+        "Ast::property::CANONICAL_NAME"
+      ]
+    },
+    {
+      "kind": "property",
+      "name": "MODIFIER_TYPE",
+      "type": "string",
+      "description": "The modifier type is a free-form string. The following are known modifier types:\n`STATIC`, `PUBLIC`, `PROTECTED`, `PRIVATE`, `ABSTRACT`, `NATIVE`, `CONSTRUCTOR`, `VIRTUAL`.",
+      "cpg:valueType": "String",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "ModifierType"
+    },
+    {
+      "kind": "constants",
+      "category": "ModifierTypes",
+      "cpg:constants": [
+        {
+          "cpg:name": "STATIC",
+          "type": "string",
+          "const": "STATIC",
+          "description": "The static modifier",
+          "cpg:protoId": "Static"
+        },
+        {
+          "cpg:name": "PUBLIC",
+          "type": "string",
+          "const": "PUBLIC",
+          "description": "The public modifier",
+          "cpg:protoId": "Public"
+        },
+        {
+          "cpg:name": "PROTECTED",
+          "type": "string",
+          "const": "PROTECTED",
+          "description": "The protected modifier",
+          "cpg:protoId": "Protected"
+        },
+        {
+          "cpg:name": "PRIVATE",
+          "type": "string",
+          "const": "PRIVATE",
+          "description": "The private modifier",
+          "cpg:protoId": "Private"
+        },
+        {
+          "cpg:name": "ABSTRACT",
+          "type": "string",
+          "const": "ABSTRACT",
+          "description": "The abstract modifier",
+          "cpg:protoId": "Abstract"
+        },
+        {
+          "cpg:name": "NATIVE",
+          "type": "string",
+          "const": "NATIVE",
+          "description": "The native modifier",
+          "cpg:protoId": "Native"
+        },
+        {
+          "cpg:name": "CONSTRUCTOR",
+          "type": "string",
+          "const": "CONSTRUCTOR",
+          "description": "The constructor modifier",
+          "cpg:protoId": "Constructor"
+        },
+        {
+          "cpg:name": "VIRTUAL",
+          "type": "string",
+          "const": "VIRTUAL",
+          "description": "The virtual modifier",
+          "cpg:protoId": "Virtual"
+        },
+        {
+          "cpg:name": "INTERNAL",
+          "type": "string",
+          "const": "INTERNAL",
+          "description": "The internal modifier",
+          "cpg:protoId": "Internal"
+        },
+        {
+          "cpg:name": "FINAL",
+          "type": "string",
+          "const": "FINAL",
+          "description": "The final modifier",
+          "cpg:protoId": "Final"
+        },
+        {
+          "cpg:name": "READONLY",
+          "type": "string",
+          "const": "READONLY",
+          "description": "The readonly modifier",
+          "cpg:protoId": "ReadOnly"
+        },
+        {
+          "cpg:name": "MODULE",
+          "type": "string",
+          "const": "MODULE",
+          "description": "Indicate that a method defines a module in the sense e.g. a python module does with the creation of a module object",
+          "cpg:protoId": "Module"
+        },
+        {
+          "cpg:name": "LAMBDA",
+          "type": "string",
+          "const": "LAMBDA",
+          "description": "Indicate that a method is an anonymous function, lambda, or closure",
+          "cpg:protoId": "Lambda"
+        }
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "MODIFIER",
+      "description": "This field represents a (language-dependent) modifier such as `static`, `private`\nor `public`. Unlike most other AST nodes, it is NOT an expression, that is, it\ncannot be evaluated and cannot be passed as an argument in function calls.",
+      "cpg:protoId": "Modifier",
+      "cpg:propertyRefs": [
+        "Ast::property::MODIFIER_TYPE"
+      ],
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "JUMP_TARGET",
+      "description": "A jump target is any location in the code that has been specifically marked\nas the target of a jump, e.g., via a label. The `NAME` field holds the name of\nthe label while the `PARSER_TYPE_NAME` field holds the name of language construct\nthat this jump target is created from, e.g., \"Label\".",
+      "cpg:protoId": "JumpTarget",
+      "cpg:propertyRefs": [
+        "Base::property::NAME",
+        "Base::property::PARSER_TYPE_NAME"
+      ],
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "JUMP_LABEL",
+      "description": "A jump label specifies the label and thus the JUMP_TARGET of control structures\nBREAK and CONTINUE. The `NAME` field holds the name of the label while the\n`PARSER_TYPE_NAME` field holds the name of language construct that this jump\nlabel is created from, e.g., \"Label\".",
+      "cpg:protoId": "JumpLabel",
+      "cpg:propertyRefs": [
+        "Base::property::NAME",
+        "Base::property::PARSER_TYPE_NAME"
+      ],
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "METHOD_REF",
+      "description": "This node represents a reference to a method/function/procedure as it\nappears when a method is passed as an argument in a call. The `METHOD_FULL_NAME`\nfield holds the fully-qualified name of the referenced method and the\n`TYPE_FULL_NAME` holds its fully-qualified type name.",
+      "cpg:protoId": "MethodRef",
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "TYPE_REF",
+      "description": "Reference to a type/class",
+      "cpg:protoId": "TypeRef",
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "RETURN",
+      "description": "This node represents a return instruction, e.g., `return x`. Note that it does\nNOT represent a formal return parameter as formal return parameters are\nrepresented via `METHOD_RETURN` nodes.",
+      "cpg:protoId": "Return",
+      "cpg:starterName": "ret",
+      "cpg:primaryKeyRef": "Base::property::CODE"
+    },
+    {
+      "kind": "property",
+      "name": "CONTROL_STRUCTURE_TYPE",
+      "type": "string",
+      "description": "The `CONTROL_STRUCTURE_TYPE` field indicates which kind of control structure\na `CONTROL_STRUCTURE` node represents. The available types are the following:\n BREAK, CONTINUE, DO, WHILE, FOR, GOTO, IF, ELSE, TRY, THROW and SWITCH.",
+      "cpg:valueType": "String",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "ControlStructureType"
+    },
+    {
+      "kind": "constants",
+      "category": "ControlStructureTypes",
+      "cpg:constants": [
+        {
+          "cpg:name": "BREAK",
+          "type": "string",
+          "const": "BREAK",
+          "description": "Represents a break statement. Labeled breaks are expected to have a JUMP_LABEL\nnode AST child with ORDER 1",
+          "cpg:protoId": "Break"
+        },
+        {
+          "cpg:name": "CONTINUE",
+          "type": "string",
+          "const": "CONTINUE",
+          "description": "Represents a continue statement. Labeled continues are expected to have a JUMP_LABEL\nnode AST child with ORDER 1",
+          "cpg:protoId": "Continue"
+        },
+        {
+          "cpg:name": "WHILE",
+          "type": "string",
+          "const": "WHILE",
+          "description": "Represents a while statement",
+          "cpg:protoId": "While"
+        },
+        {
+          "cpg:name": "DO",
+          "type": "string",
+          "const": "DO",
+          "description": "Represents a do statement",
+          "cpg:protoId": "Do"
+        },
+        {
+          "cpg:name": "FOR",
+          "type": "string",
+          "const": "FOR",
+          "description": "Represents a for statement",
+          "cpg:protoId": "For"
+        },
+        {
+          "cpg:name": "GOTO",
+          "type": "string",
+          "const": "GOTO",
+          "description": "Represents a goto statement",
+          "cpg:protoId": "Goto"
+        },
+        {
+          "cpg:name": "IF",
+          "type": "string",
+          "const": "IF",
+          "description": "Represents an if statement",
+          "cpg:protoId": "If"
+        },
+        {
+          "cpg:name": "ELSE",
+          "type": "string",
+          "const": "ELSE",
+          "description": "Represents an else statement",
+          "cpg:protoId": "Else"
+        },
+        {
+          "cpg:name": "SWITCH",
+          "type": "string",
+          "const": "SWITCH",
+          "description": "Represents a switch statement",
+          "cpg:protoId": "Switch"
+        },
+        {
+          "cpg:name": "TRY",
+          "type": "string",
+          "const": "TRY",
+          "description": "Represents a try statement",
+          "cpg:protoId": "Try"
+        },
+        {
+          "cpg:name": "THROW",
+          "type": "string",
+          "const": "THROW",
+          "description": "Represents a throw statement",
+          "cpg:protoId": "Throw"
+        },
+        {
+          "cpg:name": "MATCH",
+          "type": "string",
+          "const": "MATCH",
+          "description": "Represents a match expression",
+          "cpg:protoId": "Match"
+        },
+        {
+          "cpg:name": "YIELD",
+          "type": "string",
+          "const": "YIELD",
+          "description": "Represents a yield expression",
+          "cpg:protoId": "Yield"
+        },
+        {
+          "cpg:name": "CATCH",
+          "type": "string",
+          "const": "CATCH",
+          "description": "Represents a catch clause",
+          "cpg:protoId": "Catch"
+        },
+        {
+          "cpg:name": "FINALLY",
+          "type": "string",
+          "const": "FINALLY",
+          "description": "Represents a finally clause",
+          "cpg:protoId": "Finally"
+        }
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "CONTROL_STRUCTURE",
+      "description": "This node represents a control structure as introduced by control structure\nstatements as well as conditional and unconditional jumps. Its type is stored in the\n`CONTROL_STRUCTURE_TYPE` field to be one of several pre-defined types. These types\n are used in the construction of the control flow layer, making it possible to\n generate the control flow layer from the abstract syntax tree layer automatically.\n\nIn addition to the `CONTROL_STRUCTURE_TYPE` field, the `PARSER_TYPE_NAME` field\nMAY be used by frontends to store the name of the control structure as emitted by\nthe parser or disassembler, however, the value of this field is not relevant\nfor construction of the control flow layer.",
+      "cpg:protoId": "ControlStructure",
+      "cpg:propertyRefs": [
+        "Base::property::PARSER_TYPE_NAME",
+        "Ast::property::CONTROL_STRUCTURE_TYPE"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "UNKNOWN",
+      "description": "Any AST node that the frontend would like to include in the AST but for\nwhich no suitable AST node is specified in the CPG specification may be\nincluded using a node of type `UNKNOWN`.",
+      "cpg:protoId": "Unknown",
+      "cpg:propertyRefs": [
+        "Base::property::PARSER_TYPE_NAME",
+        "Type::property::TYPE_FULL_NAME"
+      ]
+    },
+    {
+      "kind": "edge",
+      "name": "AST",
+      "description": "This edge connects a parent node to its child in the syntax tree.",
+      "cpg:protoId": "Ast"
+    },
+    {
+      "kind": "edge",
+      "name": "CONDITION",
+      "description": "The edge connects control structure nodes to the expressions that holds their conditions.",
+      "cpg:protoId": "Condition"
+    },
+    {
+      "kind": "edge",
+      "name": "TRUE_BODY",
+      "description": "The edge connects control structure nodes to their true branch/body.",
+      "cpg:protoId": "TrueBody"
+    },
+    {
+      "kind": "edge",
+      "name": "FALSE_BODY",
+      "description": "The edge connects control structure nodes to their false branch/body.",
+      "cpg:protoId": "FalseBody"
+    },
+    {
+      "kind": "edge",
+      "name": "DO_BODY",
+      "description": "The edge connects do-while control structure nodes to their body.",
+      "cpg:protoId": "DoBody"
+    },
+    {
+      "kind": "edge",
+      "name": "FOR_INIT",
+      "description": "The edge connects for-loop control structure nodes to their initialization expression(s).",
+      "cpg:protoId": "ForInit"
+    },
+    {
+      "kind": "edge",
+      "name": "FOR_UPDATE",
+      "description": "The edge connects for-loop control structure nodes to their update/step expression(s).",
+      "cpg:protoId": "ForUpdate"
+    },
+    {
+      "kind": "edge",
+      "name": "FOR_BODY",
+      "description": "The edge connects for-loop control structure nodes to their body.",
+      "cpg:protoId": "ForBody"
+    },
+    {
+      "kind": "edge",
+      "name": "TRY_BODY",
+      "description": "The edge connects try control structure nodes to their try body.",
+      "cpg:protoId": "TryBody"
+    },
+    {
+      "kind": "edge",
+      "name": "CATCH_BODY",
+      "description": "The edge connects try control structure nodes to catch/handler bodies.",
+      "cpg:protoId": "CatchBody"
+    },
+    {
+      "kind": "edge",
+      "name": "FINALLY_BODY",
+      "description": "The edge connects try control structure nodes to their finally body.",
+      "cpg:protoId": "FinallyBody"
+    },
+    {
+      "kind": "edge",
+      "name": "JUMP_ARGUMENT",
+      "description": "The edge connects jump-like control structures to the node encoding their jump target.",
+      "cpg:protoId": "JumpArgument"
+    },
+    {
+      "kind": "outEdge",
+      "source": "FileSystem::node::FILE",
+      "edge": "Ast::edge::AST",
+      "target": "Namespace::node::NAMESPACE_BLOCK",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::MEMBER",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::MODIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::TYPE",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::TYPE_ARGUMENT"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::TYPE_DECL",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::TYPE_PARAMETER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::TYPE_DECL",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::MEMBER",
+      "cpg:cardinalityIn": "One",
+      "cpg:stepNameIn": "typeDecl",
+      "cpg:stepNameInDoc": "The type declaration this member is defined in"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::TYPE_DECL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::MODIFIER",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Method::node::METHOD_RETURN",
+      "cpg:cardinalityOut": "One",
+      "cpg:cardinalityIn": "One",
+      "cpg:stepNameOut": "methodReturn",
+      "cpg:stepNameOutDoc": "Formal return parameters"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Method::node::METHOD_PARAMETER_IN",
+      "cpg:cardinalityIn": "One",
+      "cpg:stepNameOut": "parameter",
+      "cpg:stepNameOutDoc": "Parameters of the method",
+      "cpg:stepNameIn": "method",
+      "cpg:stepNameInDoc": "Traverse to method associated with this formal parameter"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::MODIFIER",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::BLOCK",
+      "cpg:cardinalityOut": "One",
+      "cpg:cardinalityIn": "One",
+      "cpg:stepNameOut": "block",
+      "cpg:stepNameOutDoc": "Root of the abstract syntax tree"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::TYPE_PARAMETER",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::BLOCK",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LOCAL",
+      "cpg:stepNameOut": "local",
+      "cpg:stepNameOutDoc": "Traverse to locals of this block.",
+      "cpg:stepNameIn": "definingBlock",
+      "cpg:stepNameInDoc": "The block in which local is declared."
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LITERAL",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::MODIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LOCAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::IDENTIFIER",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::RETURN",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::BLOCK",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::METHOD_REF",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::JUMP_LABEL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::MODIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LOCAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::FIELD_IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::MEMBER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD_PARAMETER_IN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Namespace::node::NAMESPACE_BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::TYPE_DECL",
+      "cpg:cardinalityIn": "ZeroOrOne",
+      "cpg:stepNameIn": "namespaceBlock"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Namespace::node::NAMESPACE_BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Method::node::METHOD",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "extend",
+      "target": "Namespace::node::NAMESPACE",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::JUMP_TARGET"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::UNKNOWN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::JUMP_ARGUMENT",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::JUMP_ARGUMENT",
+      "target": "Ast::node::JUMP_LABEL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::TYPE_DECL",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::TYPE_DECL",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Type::node::TYPE_DECL",
+      "edge": "Ast::edge::AST",
+      "target": "Method::node::METHOD",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Method::node::METHOD_PARAMETER_OUT",
+      "cpg:cardinalityIn": "One",
+      "cpg:stepNameIn": "method"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Type::node::TYPE_DECL",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Method::node::METHOD",
+      "edge": "Ast::edge::AST",
+      "target": "Method::node::METHOD",
+      "cpg:cardinalityIn": "ZeroOrOne"
+    },
+    {
+      "kind": "nodeBase",
+      "name": "CALL_REPR",
+      "description": "This is the base class of `CALL` that language implementers may safely ignore.",
+      "cpg:propertyRefs": [
+        "Base::property::NAME",
+        "Method::property::SIGNATURE"
+      ]
+    },
+    {
+      "kind": "node",
+      "name": "CALL",
+      "description": "A (function/method/procedure) call. The `METHOD_FULL_NAME` property is the name of the\ninvoked method (the callee) while the `TYPE_FULL_NAME` is its return type, and\ntherefore, the return type of the call when viewing it as an expression. For\nlanguages like Javascript, it is common that we may know the (short-) name\nof the invoked method, but we do not know at compile time which method\nwill actually be invoked, e.g., because it depends on a dynamic import.\nIn this case, we leave `METHOD_FULL_NAME` blank but at least fill out `NAME`,\nwhich contains the method's (short-) name and `SIGNATURE`, which contains\nany information we may have about the types of arguments and return value.",
+      "cpg:protoId": "CallNode",
+      "cpg:extends": [
+        "Ast::nodeBase::CALL_REPR"
+      ],
+      "cpg:propertyRefs": [
+        "Type::property::TYPE_FULL_NAME"
+      ],
+      "cpg:primaryKeyRef": "Base::property::NAME"
+    },
+    {
+      "kind": "nodeBase",
+      "name": "EXPRESSION",
+      "description": "`EXPRESSION` is the base class for all nodes that represent code pieces\nthat can be evaluated.\n\n Expression may be arguments in method calls. For method calls that do\n not involved named parameters, the `ARGUMENT_INDEX` field indicates at\n which position in the argument list the expression occurs, e.g., an\n `ARGUMENT_INDEX` of 1 indicates that the expression is the first argument\n in a method call. For calls that employ named parameters, `ARGUMENT_INDEX`\n is set to -1 and the `ARGUMENT_NAME` fields holds the name of the parameter.",
+      "cpg:extends": [
+        "Ast::nodeBase::AST_NODE"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::FIELD_IDENTIFIER",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::IDENTIFIER",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::LITERAL",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::BLOCK",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::CONTROL_STRUCTURE",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::METHOD_REF",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::TYPE_REF",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::RETURN",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "extend",
+      "target": "Ast::node::UNKNOWN",
+      "cpg:extends": [
+        "Ast::nodeBase::EXPRESSION"
+      ]
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::IDENTIFIER"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::FIELD_IDENTIFIER",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::LITERAL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::METHOD_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::TYPE_REF"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::RETURN"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::BLOCK"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CALL",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CONTROL_STRUCTURE"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::RETURN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CALL",
+      "cpg:cardinalityIn": "One"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::UNKNOWN",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CONDITION",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRUE_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FALSE_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::DO_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_INIT",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_UPDATE",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FOR_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::TRY_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::CATCH_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::CONTROL_STRUCTURE",
+      "edge": "Ast::edge::FINALLY_BODY",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::BLOCK",
+      "edge": "Ast::edge::AST",
+      "target": "Ast::node::CALL"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::IDENTIFIER",
+      "edge": "Base::edge::REF",
+      "target": "Ast::node::LOCAL",
+      "cpg:cardinalityOut": "ZeroOrOne",
+      "cpg:stepNameIn": "referencingIdentifiers",
+      "cpg:stepNameInDoc": "Places (identifier) where this local is being referenced"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Ast::node::IDENTIFIER",
+      "edge": "Base::edge::REF",
+      "target": "Method::node::METHOD_PARAMETER_IN",
+      "cpg:cardinalityOut": "ZeroOrOne",
+      "cpg:stepNameIn": "referencingIdentifiers",
+      "cpg:stepNameInDoc": "Places (identifier) where this parameter is being referenced"
+    },
+    {
+      "kind": "outEdge",
+      "source": "Namespace::node::NAMESPACE_BLOCK",
+      "edge": "Base::edge::REF",
+      "target": "Namespace::node::NAMESPACE"
+    }
+  ]
+}

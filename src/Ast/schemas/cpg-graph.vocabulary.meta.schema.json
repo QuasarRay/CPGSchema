@@ -1,0 +1,402 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/meta/graph-schema-vocabulary/2026-10",
+  "title": "CPG graph-schema vocabulary meta-schema",
+  "description": "Defines the syntax of the language-neutral graph-schema operations used by CPG module schema documents.",
+  "type": [
+    "object",
+    "boolean"
+  ],
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "cpg:moduleName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:docIndex": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "cpg:providedByFrontend": {
+      "type": "boolean",
+      "default": false
+    },
+    "cpg:imports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z][A-Za-z0-9]*$"
+      },
+      "uniqueItems": true
+    },
+    "cpg:externals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ref"
+      },
+      "uniqueItems": true
+    },
+    "cpg:operations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/operation"
+      }
+    }
+  },
+  "required": [
+    "description",
+    "cpg:moduleName",
+    "cpg:docIndex",
+    "cpg:operations"
+  ],
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9]*::(?:property|node|nodeBase|edge)::[A-Z][A-Z0-9_]*$"
+    },
+    "protoId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "propertyDeclaration": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "property"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "type": {
+          "enum": [
+            "string",
+            "boolean",
+            "integer",
+            "number",
+            "array"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": true,
+        "cpg:valueType": {
+          "enum": [
+            "String",
+            "Boolean",
+            "Byte",
+            "Short",
+            "Int",
+            "Long",
+            "Float",
+            "Double",
+            "Char"
+          ]
+        },
+        "cpg:mandatory": {
+          "type": "boolean"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/protoId"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "type",
+        "description",
+        "cpg:valueType",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "cpg:mandatory": {
+                "const": true
+              }
+            },
+            "required": [
+              "cpg:mandatory"
+            ]
+          },
+          "then": {
+            "required": [
+              "default"
+            ]
+          }
+        }
+      ]
+    },
+    "nodeBaseDeclaration": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "nodeBase"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cpg:propertyRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "cpg:extends": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          },
+          "uniqueItems": true
+        },
+        "cpg:primaryKeyRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "cpg:starterName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "nodeDeclaration": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "node"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/protoId"
+        },
+        "cpg:propertyRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        },
+        "cpg:extends": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          },
+          "uniqueItems": true
+        },
+        "cpg:primaryKeyRef": {
+          "$ref": "#/$defs/ref"
+        },
+        "cpg:starterName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "description",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false
+    },
+    "edgeDeclaration": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "edge"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/protoId"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "description",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false
+    },
+    "constant": {
+      "type": "object",
+      "properties": {
+        "cpg:name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "string",
+            "boolean",
+            "integer",
+            "number"
+          ]
+        },
+        "const": true,
+        "description": {
+          "type": "string"
+        },
+        "cpg:protoId": {
+          "$ref": "#/$defs/protoId"
+        }
+      },
+      "required": [
+        "cpg:name",
+        "type",
+        "const",
+        "description",
+        "cpg:protoId"
+      ],
+      "additionalProperties": false
+    },
+    "constantsDeclaration": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "constants"
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cpg:constants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constant"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "category",
+        "cpg:constants"
+      ],
+      "additionalProperties": false
+    },
+    "extendOperation": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "extend"
+        },
+        "target": {
+          "$ref": "#/$defs/ref"
+        },
+        "cpg:extends": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ref"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "kind",
+        "target",
+        "cpg:extends"
+      ],
+      "additionalProperties": false
+    },
+    "outEdgeOperation": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "outEdge"
+        },
+        "source": {
+          "$ref": "#/$defs/ref"
+        },
+        "edge": {
+          "$ref": "#/$defs/ref"
+        },
+        "target": {
+          "$ref": "#/$defs/ref"
+        },
+        "cpg:cardinalityOut": {
+          "enum": [
+            "One",
+            "ZeroOrOne"
+          ]
+        },
+        "cpg:cardinalityIn": {
+          "enum": [
+            "One",
+            "ZeroOrOne"
+          ]
+        },
+        "cpg:stepNameOut": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cpg:stepNameOutDoc": {
+          "type": "string"
+        },
+        "cpg:stepNameIn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cpg:stepNameInDoc": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "source",
+        "edge",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "operation": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/propertyDeclaration"
+        },
+        {
+          "$ref": "#/$defs/nodeBaseDeclaration"
+        },
+        {
+          "$ref": "#/$defs/nodeDeclaration"
+        },
+        {
+          "$ref": "#/$defs/edgeDeclaration"
+        },
+        {
+          "$ref": "#/$defs/constantsDeclaration"
+        },
+        {
+          "$ref": "#/$defs/extendOperation"
+        },
+        {
+          "$ref": "#/$defs/outEdgeOperation"
+        }
+      ]
+    }
+  }
+}

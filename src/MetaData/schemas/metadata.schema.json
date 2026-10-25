@@ -1,0 +1,205 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/modules/metadata/2026-10",
+  "title": "MetaData",
+  "description": "\nThe Meta Data Layer contains information about CPG creation. In particular,\nit indicates which language frontend generated the CPG and which overlays\nhave been applied. The layer consists of a single node - the Meta Data node -\nand language frontends MUST create this node. Overlay creators MUST edit\nthis node to indicate that a layer has been successfully applied in all\ncases where applying the layer more than once is prohibitive.\n",
+  "allOf": [
+    {
+      "$ref": "https://shiftleft.io/codepropertygraph/schema/modules/base/2026-10"
+    }
+  ],
+  "cpg:moduleName": "MetaData",
+  "cpg:docIndex": 2,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": {
+    "Base": "https://shiftleft.io/codepropertygraph/schema/modules/base/2026-10"
+  },
+  "cpg:properties": {
+    "OVERLAYS": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The field contains the names of the overlays applied to this CPG, in order of their\napplication. Names are free-form strings, that is, this specification does not\ndictate them but rather requires tool producers and consumers to communicate them\nbetween each other.",
+      "cpg:valueType": "String",
+      "cpg:cardinality": "list",
+      "cpg:protoId": "Overlays"
+    },
+    "LANGUAGE": {
+      "type": "string",
+      "description": "This field indicates which CPG language frontend generated the CPG.\nFrontend developers may freely choose a value that describes their frontend\nso long as it is not used by an existing frontend. Reserved values are to date:\nC, LLVM, GHIDRA, PHP.",
+      "default": "<empty>",
+      "cpg:valueType": "String",
+      "cpg:cardinality": "mandatory",
+      "cpg:protoId": "Language"
+    },
+    "ROOT": {
+      "type": "string",
+      "description": "The path to the root directory of the source/binary this CPG is generated from.",
+      "default": "<empty>",
+      "cpg:valueType": "String",
+      "cpg:cardinality": "mandatory",
+      "cpg:protoId": "Root"
+    }
+  },
+  "cpg:nodeTypes": {
+    "META_DATA": {
+      "description": "This node contains the CPG meta data. Exactly one node of this type\nMUST exist per CPG. The `HASH` property MAY contain a hash value calculated\nover the source files this CPG was generated from. The `VERSION` MUST be\nset to the version of the specification (\"1.1\"). The language field indicates\nwhich language frontend was used to generate the CPG and the list property\n`OVERLAYS` specifies which overlays have been applied to the CPG.",
+      "cpg:protoId": "MetaData",
+      "cpg:propertyRefs": [
+        "#/cpg:properties/LANGUAGE",
+        "https://shiftleft.io/codepropertygraph/schema/modules/base/2026-10#/cpg:properties/VERSION",
+        "#/cpg:properties/OVERLAYS",
+        "https://shiftleft.io/codepropertygraph/schema/modules/base/2026-10#/cpg:properties/HASH",
+        "#/cpg:properties/ROOT"
+      ]
+    }
+  },
+  "cpg:constantCategories": {
+    "Languages": {
+      "$comment": "Removed protoId 16. Used to be \"Solidity\".",
+      "cpg:constants": [
+        {
+          "cpg:name": "JAVA",
+          "type": "string",
+          "const": "JAVA",
+          "description": "",
+          "cpg:protoId": "Java"
+        },
+        {
+          "cpg:name": "JAVASCRIPT",
+          "type": "string",
+          "const": "JAVASCRIPT",
+          "description": "",
+          "cpg:protoId": "JavaScript"
+        },
+        {
+          "cpg:name": "GOLANG",
+          "type": "string",
+          "const": "GOLANG",
+          "description": "",
+          "cpg:protoId": "Golang"
+        },
+        {
+          "cpg:name": "CSHARP",
+          "type": "string",
+          "const": "CSHARP",
+          "description": "",
+          "cpg:protoId": "CSharp"
+        },
+        {
+          "cpg:name": "ABAP",
+          "type": "string",
+          "const": "ABAP",
+          "description": "",
+          "cpg:protoId": "ABAP"
+        },
+        {
+          "cpg:name": "C",
+          "type": "string",
+          "const": "C",
+          "description": "",
+          "cpg:protoId": "C"
+        },
+        {
+          "cpg:name": "PYTHON",
+          "type": "string",
+          "const": "PYTHON",
+          "description": "",
+          "cpg:protoId": "Python"
+        },
+        {
+          "cpg:name": "LLVM",
+          "type": "string",
+          "const": "LLVM",
+          "description": "",
+          "cpg:protoId": "LLVM"
+        },
+        {
+          "cpg:name": "PHP",
+          "type": "string",
+          "const": "PHP",
+          "description": "",
+          "cpg:protoId": "PHP"
+        },
+        {
+          "cpg:name": "FUZZY_TEST_LANG",
+          "type": "string",
+          "const": "FUZZY_TEST_LANG",
+          "description": "",
+          "cpg:protoId": "FuzzyTestLang"
+        },
+        {
+          "cpg:name": "GHIDRA",
+          "type": "string",
+          "const": "GHIDRA",
+          "description": "generic reverse engineering framework",
+          "cpg:protoId": "Ghidra"
+        },
+        {
+          "cpg:name": "KOTLIN",
+          "type": "string",
+          "const": "KOTLIN",
+          "description": "",
+          "cpg:protoId": "Kotlin"
+        },
+        {
+          "cpg:name": "NEWC",
+          "type": "string",
+          "const": "NEWC",
+          "description": "Eclipse CDT based parser for C/C++",
+          "cpg:protoId": "NewC"
+        },
+        {
+          "cpg:name": "JAVASRC",
+          "type": "string",
+          "const": "JAVASRC",
+          "description": "Source-based front-end for Java",
+          "cpg:protoId": "JavaSrc"
+        },
+        {
+          "cpg:name": "PYTHONSRC",
+          "type": "string",
+          "const": "PYTHONSRC",
+          "description": "Source-based front-end for Python",
+          "cpg:protoId": "PythonSrc"
+        },
+        {
+          "cpg:name": "JSSRC",
+          "type": "string",
+          "const": "JSSRC",
+          "description": "Source-based JS frontend based on Babel",
+          "cpg:protoId": "JsSrc"
+        },
+        {
+          "cpg:name": "RUBYSRC",
+          "type": "string",
+          "const": "RUBYSRC",
+          "description": "Source-based frontend for Ruby",
+          "cpg:protoId": "RubySrc"
+        },
+        {
+          "cpg:name": "SWIFTSRC",
+          "type": "string",
+          "const": "SWIFTSRC",
+          "description": "Source-based frontend for Swift",
+          "cpg:protoId": "SwiftSrc"
+        },
+        {
+          "cpg:name": "CSHARPSRC",
+          "type": "string",
+          "const": "CSHARPSRC",
+          "description": "Source-based frontend for C# and .NET",
+          "cpg:protoId": "CSharpSrc"
+        },
+        {
+          "cpg:name": "RUST",
+          "type": "string",
+          "const": "RUST",
+          "description": "",
+          "cpg:protoId": "Rust"
+        }
+      ]
+    }
+  }
+}

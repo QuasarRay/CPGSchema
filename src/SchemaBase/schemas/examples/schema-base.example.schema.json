@@ -1,0 +1,8 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/examples/schema-base/2026-10",
+  "title": "ExampleSchemaModule",
+  "description": "Example module implementing the SchemaBase contract.",
+  "cpg:docIndex": 0,
+  "type": "object"
+}

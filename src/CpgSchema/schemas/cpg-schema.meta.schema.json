@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/meta/cpg-schema/2026-10",
+  "title": "CpgSchema contract meta-schema",
+  "description": "Validates the JSON representation of the project-wide CpgSchema composition contract. It is a binding of the same semantics exposed by the Rust traits.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "const": "https://shiftleft.io/codepropertygraph/schema/dialect/2026-10"
+    },
+    "$id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:domainShortName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:basePackage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:additionalTraversalsPackages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "cpg:modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "cpg:dependsOn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "name",
+          "cpg:dependsOn"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "cpg:propertyDefaults": {
+      "type": "object",
+      "properties": {
+        "String": {
+          "type": "string"
+        },
+        "Boolean": {
+          "type": "boolean"
+        },
+        "Byte": {
+          "type": "integer",
+          "minimum": -128,
+          "maximum": 127
+        },
+        "Short": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "Int": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "Long": {
+          "type": "integer"
+        },
+        "Float": {
+          "type": "number"
+        },
+        "Double": {
+          "type": "number"
+        },
+        "Char": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        }
+      },
+      "required": [
+        "String",
+        "Boolean",
+        "Byte",
+        "Short",
+        "Int",
+        "Long",
+        "Float",
+        "Double",
+        "Char"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "$schema",
+    "$id",
+    "title",
+    "cpg:domainShortName",
+    "cpg:basePackage",
+    "cpg:additionalTraversalsPackages",
+    "cpg:modules",
+    "cpg:propertyDefaults"
+  ],
+  "additionalProperties": true
+}

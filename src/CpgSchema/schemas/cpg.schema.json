@@ -1,0 +1,185 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/cpg/2026-10",
+  "title": "CpgSchema",
+  "description": "Canonical Code Property Graph schema composition.",
+  "cpg:domainShortName": "Cpg",
+  "cpg:basePackage": "io.shiftleft.codepropertygraph.generated",
+  "cpg:additionalTraversalsPackages": [
+    "io.shiftleft"
+  ],
+  "cpg:modules": [
+    {
+      "name": "Base",
+      "cpg:dependsOn": []
+    },
+    {
+      "name": "FileSystem",
+      "cpg:dependsOn": [
+        "Base"
+      ]
+    },
+    {
+      "name": "Namespace",
+      "cpg:dependsOn": [
+        "Base",
+        "FileSystem"
+      ]
+    },
+    {
+      "name": "Operators",
+      "cpg:dependsOn": []
+    },
+    {
+      "name": "Configuration",
+      "cpg:dependsOn": [
+        "Base"
+      ]
+    },
+    {
+      "name": "MetaData",
+      "cpg:dependsOn": [
+        "Base"
+      ]
+    },
+    {
+      "name": "Type",
+      "cpg:dependsOn": [
+        "Base",
+        "FileSystem"
+      ]
+    },
+    {
+      "name": "Method",
+      "cpg:dependsOn": [
+        "Base",
+        "Type",
+        "FileSystem"
+      ]
+    },
+    {
+      "name": "Ast",
+      "cpg:dependsOn": [
+        "Base",
+        "Namespace",
+        "Method",
+        "Type",
+        "FileSystem"
+      ]
+    },
+    {
+      "name": "CallGraph",
+      "cpg:dependsOn": [
+        "Method",
+        "Ast"
+      ]
+    },
+    {
+      "name": "Cfg",
+      "cpg:dependsOn": [
+        "Method",
+        "Ast"
+      ]
+    },
+    {
+      "name": "Dominators",
+      "cpg:dependsOn": [
+        "Method",
+        "Ast"
+      ]
+    },
+    {
+      "name": "Pdg",
+      "cpg:dependsOn": [
+        "Method",
+        "Ast"
+      ]
+    },
+    {
+      "name": "Shortcuts",
+      "cpg:dependsOn": [
+        "Base",
+        "Method",
+        "Ast",
+        "Type",
+        "FileSystem"
+      ]
+    },
+    {
+      "name": "Comment",
+      "cpg:dependsOn": [
+        "Base",
+        "Ast",
+        "FileSystem"
+      ]
+    },
+    {
+      "name": "Tags",
+      "cpg:dependsOn": [
+        "Base",
+        "Type",
+        "Method",
+        "Ast",
+        "FileSystem",
+        "CallGraph"
+      ]
+    },
+    {
+      "name": "Binding",
+      "cpg:dependsOn": [
+        "Base",
+        "Type",
+        "Method",
+        "CallGraph"
+      ]
+    },
+    {
+      "name": "Annotation",
+      "cpg:dependsOn": [
+        "Base",
+        "Method",
+        "Type",
+        "Ast",
+        "Shortcuts"
+      ]
+    },
+    {
+      "name": "Finding",
+      "cpg:dependsOn": [
+        "Base"
+      ]
+    },
+    {
+      "name": "Hidden",
+      "cpg:dependsOn": [
+        "Base",
+        "Method",
+        "Type",
+        "Ast",
+        "Cfg",
+        "FileSystem",
+        "CallGraph",
+        "Pdg",
+        "Tags",
+        "Shortcuts"
+      ]
+    },
+    {
+      "name": "ProtoSerialize",
+      "cpg:dependsOn": [
+        "Ast"
+      ]
+    }
+  ],
+  "cpg:propertyDefaults": {
+    "String": "<empty>",
+    "Boolean": false,
+    "Byte": -1,
+    "Short": -1,
+    "Int": -1,
+    "Long": -1,
+    "Float": 0.0,
+    "Double": 0.0,
+    "Char": "?"
+  }
+}

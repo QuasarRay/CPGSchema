@@ -1,0 +1,107 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/modules/base/2026-10",
+  "title": "Base",
+  "description": "\n",
+  "cpg:moduleName": "Base",
+  "cpg:docIndex": 2147483647,
+  "cpg:providedByFrontend": true,
+  "cpg:properties": {
+    "VERSION": {
+      "type": "string",
+      "description": "A version, given as a string. Used, for example, in the META_DATA node to\nindicate which version of the CPG spec this CPG conforms to",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "Version"
+    },
+    "HASH": {
+      "type": "string",
+      "description": "This property contains a hash value in the form of a string.\nHashes can be used to summarize data, e.g., to summarize the\ncontents of source files or sub graphs. Such summaries are useful\nto determine whether code has already been analyzed in incremental\nanalysis pipelines. This property is optional to allow its calculation\nto be deferred or skipped if the hash is not needed.",
+      "cpg:protoId": "Hash"
+    },
+    "CODE": {
+      "type": "string",
+      "description": "This field holds the code snippet that the node represents.",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "Code"
+    },
+    "IS_EXTERNAL": {
+      "type": "boolean",
+      "description": "Indicates that the construct (METHOD or TYPE_DECL) is external, that is,\nit is referenced but not defined in the code (applies both to insular\nparsing and to library functions where we have header files only)",
+      "cpg:mandatory": true,
+      "default": false,
+      "cpg:protoId": "IsExternal"
+    },
+    "INDEX": {
+      "type": "integer",
+      "description": "Specifies an index, e.g., for a parameter or argument.\n Explicit parameters are numbered from 1 to N, while index 0 is reserved for implicit\n self / this parameter.",
+      "cpg:mandatory": true,
+      "default": -2,
+      "cpg:protoId": "Index"
+    },
+    "NAME": {
+      "type": "string",
+      "description": "Name of represented object, e.g., method name (e.g. \"run\")",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "Name"
+    },
+    "FULL_NAME": {
+      "type": "string",
+      "description": "This is the fully-qualified name of an entity, e.g., the fully-qualified\nname of a method or type. The details of what constitutes a fully-qualified\nname are language specific. This field SHOULD be human readable.",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "FullName"
+    },
+    "PARSER_TYPE_NAME": {
+      "type": "string",
+      "description": "AST node type name emitted by parser.",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "ParserTypeName"
+    },
+    "VALUE": {
+      "type": "string",
+      "description": "This property denotes a string value as used in a key-value pair.",
+      "cpg:mandatory": true,
+      "default": "",
+      "cpg:protoId": "Value"
+    },
+    "CONTENT": {
+      "type": "string",
+      "description": "Certain files, e.g., configuration files, may be included in the CPG as-is.\nFor such files, the `CONTENT` field contains the files content.",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "Content"
+    },
+    "AST_PARENT_TYPE": {
+      "type": "string",
+      "description": "The type of the AST parent. Since this is only used in some parts of the graph,\nthe list does not include all possible parents by intention.\nPossible parents: METHOD, TYPE_DECL, NAMESPACE_BLOCK.",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "AstParentType"
+    },
+    "AST_PARENT_FULL_NAME": {
+      "type": "string",
+      "description": "This field holds the FULL_NAME of the AST parent of an entity.",
+      "cpg:mandatory": true,
+      "default": "<empty>",
+      "cpg:protoId": "AstParentFullName"
+    }
+  },
+  "cpg:nodeBaseTypes": {
+    "DECLARATION": {
+      "description": "This is the base node class for all declarations.",
+      "cpg:properties": [
+        "NAME"
+      ]
+    }
+  },
+  "cpg:edgeTypes": {
+    "REF": {
+      "description": "This edge indicates that the source node is an identifier that denotes\naccess to the destination node. For example, an identifier may reference\na local variable.",
+      "cpg:protoId": "Ref"
+    }
+  }
+}

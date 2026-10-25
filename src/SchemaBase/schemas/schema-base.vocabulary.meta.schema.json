@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/meta/schema-base/2026-10",
+  "title": "CPG SchemaBase vocabulary meta-schema",
+  "description": "Language-neutral SchemaBase semantics expressed as JSON Schema vocabulary keywords.",
+  "type": [
+    "object",
+    "boolean"
+  ],
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "cpg:docIndex": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "cpg:providedByFrontend": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "description",
+    "cpg:docIndex"
+  ]
+}

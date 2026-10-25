@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/meta/cpg-schema-vocabulary/2026-10",
+  "title": "CPG schema-composition vocabulary",
+  "description": "Syntax for JSON Schema keywords representing the CpgSchema composition contract. Cross-module dependency ordering is a semantic invariant and is checked by the common contract validator.",
+  "type": [
+    "object",
+    "boolean"
+  ],
+  "properties": {
+    "cpg:domainShortName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:basePackage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:additionalTraversalsPackages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "cpg:modules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/module"
+      },
+      "minItems": 1
+    },
+    "cpg:propertyDefaults": {
+      "$ref": "#/$defs/propertyDefaults"
+    }
+  },
+  "$defs": {
+    "module": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cpg:dependsOn": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "name",
+        "cpg:dependsOn"
+      ],
+      "additionalProperties": false
+    },
+    "propertyDefaults": {
+      "type": "object",
+      "properties": {
+        "String": {
+          "type": "string"
+        },
+        "Boolean": {
+          "type": "boolean"
+        },
+        "Byte": {
+          "type": "integer",
+          "minimum": -128,
+          "maximum": 127
+        },
+        "Short": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767
+        },
+        "Int": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "Long": {
+          "type": "integer"
+        },
+        "Float": {
+          "type": "number"
+        },
+        "Double": {
+          "type": "number"
+        },
+        "Char": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        }
+      },
+      "required": [
+        "String",
+        "Boolean",
+        "Byte",
+        "Short",
+        "Int",
+        "Long",
+        "Float",
+        "Double",
+        "Char"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

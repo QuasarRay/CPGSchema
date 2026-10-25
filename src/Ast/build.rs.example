@@ -1,0 +1,6 @@
+#[path = "build/validate_ast_schema.rs"]
+mod validate_ast_schema;
+
+fn main() {
+    validate_ast_schema::validate();
+}
