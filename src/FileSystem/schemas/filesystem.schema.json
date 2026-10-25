@@ -1,0 +1,115 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/filesystem-layer/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/layer/filesystem/2026-10",
+  "title": "FileSystem",
+  "description": "CPGs are created from sets of files. The File System Layer describes their layout, provides information about source files and shared objects, and allows graph nodes to be mapped back to file-system locations.",
+  "cpg:layerName": "FileSystem",
+  "cpg:docIndex": 3,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": {
+    "properties": [
+      "NAME",
+      "HASH",
+      "CONTENT"
+    ],
+    "nodeTypes": [],
+    "edgeTypes": []
+  },
+  "cpg:properties": [
+    {
+      "name": "FILENAME",
+      "valueType": "String",
+      "cardinality": "one",
+      "default": "<empty>",
+      "protoId": 106,
+      "description": "Path of the source file relative to the root path in META_DATA. The field is mandatory but may use <unknown> when no source file can be associated with the node."
+    },
+    {
+      "name": "LINE_NUMBER",
+      "valueType": "Int",
+      "cardinality": "optional",
+      "protoId": 2,
+      "description": "Optional line number of the represented program construct."
+    },
+    {
+      "name": "COLUMN_NUMBER",
+      "valueType": "Int",
+      "cardinality": "optional",
+      "protoId": 11,
+      "description": "Optional column number of the represented program construct."
+    },
+    {
+      "name": "LINE_NUMBER_END",
+      "valueType": "Int",
+      "cardinality": "optional",
+      "protoId": 12,
+      "description": "Optional line number at which the represented program construct ends."
+    },
+    {
+      "name": "COLUMN_NUMBER_END",
+      "valueType": "Int",
+      "cardinality": "optional",
+      "protoId": 16,
+      "description": "Optional column number at which the represented program construct ends."
+    },
+    {
+      "name": "OFFSET",
+      "valueType": "Int",
+      "cardinality": "optional",
+      "protoId": 3812,
+      "description": "Start offset into CONTENT of the corresponding FILE node. The source specifies UTF-16 encoding for offset measurement."
+    },
+    {
+      "name": "OFFSET_END",
+      "valueType": "Int",
+      "cardinality": "optional",
+      "protoId": 3813,
+      "description": "Exclusive end offset into CONTENT of the corresponding FILE node."
+    }
+  ],
+  "cpg:nodeTypes": [
+    {
+      "name": "FILE",
+      "protoId": 38,
+      "description": "Represents a source file or shared object and serves as an index for looking up code elements by file. The Scala prose also describes FILE as an AST root with order 0, but this layer's builder does not add AST inheritance or ORDER, so that prose is not turned into an additional structural constraint here.",
+      "properties": [
+        "NAME",
+        "HASH",
+        "CONTENT"
+      ],
+      "primaryKey": "NAME"
+    }
+  ],
+  "cpg:edgeTypes": [
+    {
+      "name": "SOURCE_FILE",
+      "protoId": 157,
+      "description": "Connects a node to the node representing its source file. Frontends must not create these edges; they are automatically created based on FILENAME fields."
+    }
+  ],
+  "cpg:outEdges": [],
+  "cpg:derivedEdges": [
+    {
+      "edge": "SOURCE_FILE",
+      "sourceScope": "anyNodeWithProperty",
+      "sourceProperty": "FILENAME",
+      "targetNode": "FILE",
+      "createdAutomatically": true,
+      "frontendCreates": false
+    }
+  ],
+  "cpg:autoNodeMaterialization": [
+    {
+      "nodeType": "FILE",
+      "fromProperty": "FILENAME",
+      "whenMissing": true
+    }
+  ],
+  "cpg:offsetSemantics": {
+    "startProperty": "OFFSET",
+    "endProperty": "OFFSET_END",
+    "contentProperty": "CONTENT",
+    "encoding": "UTF-16",
+    "endExclusive": true
+  }
+}

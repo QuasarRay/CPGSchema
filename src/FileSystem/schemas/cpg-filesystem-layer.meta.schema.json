@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/meta/filesystem-layer/2026-10",
+  "title": "CPG FileSystem layer model meta-schema",
+  "allOf": [
+    {
+      "$ref": "https://shiftleft.io/codepropertygraph/schema/meta/filesystem-layer-vocabulary/2026-10"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "$schema": {
+          "const": "https://shiftleft.io/codepropertygraph/schema/dialect/filesystem-layer/2026-10"
+        },
+        "$id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "const": "FileSystem"
+        },
+        "description": {
+          "type": "string"
+        },
+        "cpg:layerName": {
+          "const": "FileSystem"
+        },
+        "cpg:docIndex": {
+          "const": 3
+        },
+        "cpg:providedByFrontend": {
+          "const": false
+        }
+      },
+      "required": [
+        "$schema",
+        "$id",
+        "title",
+        "description",
+        "cpg:layerName",
+        "cpg:docIndex",
+        "cpg:providedByFrontend",
+        "cpg:imports",
+        "cpg:properties",
+        "cpg:nodeTypes",
+        "cpg:edgeTypes",
+        "cpg:outEdges",
+        "cpg:derivedEdges",
+        "cpg:autoNodeMaterialization",
+        "cpg:offsetSemantics"
+      ],
+      "cpg:wellFormedFileSystemLayer": true
+    }
+  ]
+}

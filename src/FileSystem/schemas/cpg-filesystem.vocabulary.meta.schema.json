@@ -1,0 +1,322 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/meta/filesystem-layer-vocabulary/2026-10",
+  "title": "CPG FileSystem-layer vocabulary",
+  "description": "Syntax for declaratively expressing the FileSystem layer's FlatGraph properties, node and edge types, automatically derived edges, node materialization, and offset semantics.",
+  "type": [
+    "object",
+    "boolean"
+  ],
+  "properties": {
+    "cpg:layerName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cpg:docIndex": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cpg:providedByFrontend": {
+      "type": "boolean"
+    },
+    "cpg:imports": {
+      "$ref": "#/$defs/imports"
+    },
+    "cpg:properties": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/property"
+      }
+    },
+    "cpg:nodeTypes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nodeType"
+      }
+    },
+    "cpg:edgeTypes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edgeType"
+      }
+    },
+    "cpg:outEdges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/outEdge"
+      }
+    },
+    "cpg:derivedEdges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/derivedEdge"
+      }
+    },
+    "cpg:autoNodeMaterialization": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/autoNodeMaterialization"
+      }
+    },
+    "cpg:offsetSemantics": {
+      "$ref": "#/$defs/offsetSemantics"
+    },
+    "cpg:wellFormedFileSystemLayer": {
+      "const": true
+    }
+  },
+  "$defs": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nameArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/name"
+      },
+      "uniqueItems": true
+    },
+    "imports": {
+      "type": "object",
+      "properties": {
+        "properties": {
+          "$ref": "#/$defs/nameArray"
+        },
+        "nodeTypes": {
+          "$ref": "#/$defs/nameArray"
+        },
+        "edgeTypes": {
+          "$ref": "#/$defs/nameArray"
+        }
+      },
+      "required": [
+        "properties",
+        "nodeTypes",
+        "edgeTypes"
+      ],
+      "additionalProperties": false
+    },
+    "property": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "valueType": {
+          "enum": [
+            "String",
+            "Boolean",
+            "Byte",
+            "Short",
+            "Int",
+            "Long",
+            "Float",
+            "Double",
+            "Char"
+          ]
+        },
+        "cardinality": {
+          "enum": [
+            "optional",
+            "one",
+            "list"
+          ]
+        },
+        "default": true,
+        "protoId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "valueType",
+        "cardinality",
+        "protoId",
+        "description"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "cardinality": {
+                "const": "one"
+              }
+            },
+            "required": [
+              "cardinality"
+            ]
+          },
+          "then": {
+            "required": [
+              "default"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "nodeType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "protoId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "properties": {
+          "$ref": "#/$defs/nameArray"
+        },
+        "primaryKey": {
+          "$ref": "#/$defs/name"
+        }
+      },
+      "required": [
+        "name",
+        "protoId",
+        "description",
+        "properties"
+      ],
+      "additionalProperties": false
+    },
+    "edgeType": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "protoId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "protoId",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "outEdge": {
+      "type": "object",
+      "properties": {
+        "outNode": {
+          "$ref": "#/$defs/name"
+        },
+        "edge": {
+          "$ref": "#/$defs/name"
+        },
+        "inNode": {
+          "$ref": "#/$defs/name"
+        },
+        "stepNameOut": {
+          "$ref": "#/$defs/name"
+        },
+        "stepNameIn": {
+          "$ref": "#/$defs/name"
+        },
+        "stepNameInDoc": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "outNode",
+        "edge",
+        "inNode"
+      ],
+      "additionalProperties": false
+    },
+    "derivedEdge": {
+      "type": "object",
+      "properties": {
+        "edge": {
+          "$ref": "#/$defs/name"
+        },
+        "sourceScope": {
+          "const": "anyNodeWithProperty"
+        },
+        "sourceProperty": {
+          "$ref": "#/$defs/name"
+        },
+        "targetNode": {
+          "$ref": "#/$defs/name"
+        },
+        "createdAutomatically": {
+          "const": true
+        },
+        "frontendCreates": {
+          "const": false
+        }
+      },
+      "required": [
+        "edge",
+        "sourceScope",
+        "sourceProperty",
+        "targetNode",
+        "createdAutomatically",
+        "frontendCreates"
+      ],
+      "additionalProperties": false
+    },
+    "autoNodeMaterialization": {
+      "type": "object",
+      "properties": {
+        "nodeType": {
+          "$ref": "#/$defs/name"
+        },
+        "fromProperty": {
+          "$ref": "#/$defs/name"
+        },
+        "whenMissing": {
+          "const": true
+        }
+      },
+      "required": [
+        "nodeType",
+        "fromProperty",
+        "whenMissing"
+      ],
+      "additionalProperties": false
+    },
+    "offsetSemantics": {
+      "type": "object",
+      "properties": {
+        "startProperty": {
+          "$ref": "#/$defs/name"
+        },
+        "endProperty": {
+          "$ref": "#/$defs/name"
+        },
+        "contentProperty": {
+          "$ref": "#/$defs/name"
+        },
+        "encoding": {
+          "const": "UTF-16"
+        },
+        "endExclusive": {
+          "const": true
+        }
+      },
+      "required": [
+        "startProperty",
+        "endProperty",
+        "contentProperty",
+        "encoding",
+        "endExclusive"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
