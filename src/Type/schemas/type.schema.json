@@ -1,0 +1,205 @@
+{
+  "$schema": "https://shiftleft.io/codepropertygraph/schema/dialect/type-layer/2026-10",
+  "$id": "https://shiftleft.io/codepropertygraph/schema/layer/type/2026-10",
+  "title": "Type",
+  "description": "The Type Layer contains information about type declarations, relations between types, and type instantiation and usage. It models parametrized types, type hierarchies, and aliases.",
+  "cpg:layerName": "Type",
+  "cpg:docIndex": 6,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": {
+    "properties": [
+      "NAME",
+      "FULL_NAME",
+      "IS_EXTERNAL",
+      "FILENAME",
+      "AST_PARENT_TYPE",
+      "AST_PARENT_FULL_NAME",
+      "CODE"
+    ],
+    "nodeTypes": [
+      "FILE"
+    ],
+    "nodeBaseTypes": [
+      {
+        "name": "DECLARATION",
+        "properties": [
+          "NAME"
+        ]
+      }
+    ],
+    "edgeTypes": [
+      "REF",
+      "SOURCE_FILE"
+    ]
+  },
+  "cpg:properties": [
+    {
+      "name": "TYPE_FULL_NAME",
+      "valueType": "String",
+      "cardinality": "one",
+      "default": "<empty>",
+      "protoId": 51,
+      "description": "Fully-qualified static type name of the represented program construct; this is an instantiated type name. If unknown, it is the empty-string default."
+    },
+    {
+      "name": "ALIAS_TYPE_FULL_NAME",
+      "valueType": "String",
+      "cardinality": "optional",
+      "protoId": 158,
+      "description": "Fully-qualified name of the type that the node is a type alias of."
+    },
+    {
+      "name": "INHERITS_FROM_TYPE_FULL_NAME",
+      "valueType": "String",
+      "cardinality": "list",
+      "protoId": 53,
+      "description": "Static types a TYPE_DECL inherits from, matched against FULL_NAME of TYPE nodes."
+    },
+    {
+      "name": "TYPE_DECL_FULL_NAME",
+      "valueType": "String",
+      "cardinality": "one",
+      "default": "<empty>",
+      "protoId": 52,
+      "description": "Static type declaration of a TYPE, matched against FULL_NAME of TYPE_DECL nodes."
+    }
+  ],
+  "cpg:nodeTypes": [
+    {
+      "name": "TYPE_DECL",
+      "protoId": 46,
+      "description": "A type declaration such as a class, struct, or union declaration; unlike TYPE, it is not a concrete instantiation.",
+      "properties": [
+        "NAME",
+        "FULL_NAME",
+        "IS_EXTERNAL",
+        "INHERITS_FROM_TYPE_FULL_NAME",
+        "ALIAS_TYPE_FULL_NAME",
+        "FILENAME",
+        "AST_PARENT_TYPE",
+        "AST_PARENT_FULL_NAME"
+      ],
+      "primaryKey": "NAME"
+    },
+    {
+      "name": "TYPE_PARAMETER",
+      "protoId": 47,
+      "description": "A formal type parameter of a parametrized method or type declaration.",
+      "properties": [
+        "NAME"
+      ]
+    },
+    {
+      "name": "TYPE_ARGUMENT",
+      "protoId": 48,
+      "description": "An actual type argument used to instantiate a parametrized type. The Scala documentation says CODE must be stored, but the builder does not add CODE; this declarative port preserves the builder behavior.",
+      "properties": []
+    },
+    {
+      "name": "MEMBER",
+      "protoId": 9,
+      "description": "A type member of a class, struct, or union.",
+      "properties": [
+        "TYPE_FULL_NAME",
+        "AST_PARENT_TYPE",
+        "AST_PARENT_FULL_NAME"
+      ],
+      "extends": [
+        "DECLARATION"
+      ],
+      "primaryKey": "NAME"
+    },
+    {
+      "name": "TYPE",
+      "protoId": 45,
+      "description": "A concrete type instance / instantiation of a type declaration.",
+      "properties": [
+        "NAME",
+        "FULL_NAME",
+        "TYPE_DECL_FULL_NAME"
+      ],
+      "starterName": "typ",
+      "primaryKey": "NAME"
+    }
+  ],
+  "cpg:edgeTypes": [
+    {
+      "name": "BINDS_TO",
+      "protoId": 22,
+      "description": "Connects a type argument to the type parameter it instantiates."
+    },
+    {
+      "name": "ALIAS_OF",
+      "protoId": 138,
+      "description": "Alias relation between a type declaration and a type; loader-created from ALIAS_TYPE_FULL_NAME rather than frontend-created."
+    },
+    {
+      "name": "INHERITS_FROM",
+      "protoId": 23,
+      "description": "Inheritance relation between a type declaration and a type; loader-created from INHERITS_FROM_TYPE_FULL_NAME rather than frontend-created."
+    }
+  ],
+  "cpg:outEdges": [
+    {
+      "outNode": "TYPE_DECL",
+      "edge": "INHERITS_FROM",
+      "inNode": "TYPE"
+    },
+    {
+      "outNode": "TYPE_DECL",
+      "edge": "ALIAS_OF",
+      "inNode": "TYPE",
+      "stepNameOut": "aliasedType",
+      "stepNameIn": "aliasTypeDecl",
+      "stepNameInDoc": "Direct alias type declarations."
+    },
+    {
+      "outNode": "TYPE_DECL",
+      "edge": "SOURCE_FILE",
+      "inNode": "FILE",
+      "stepNameIn": "typeDecl"
+    },
+    {
+      "outNode": "TYPE_ARGUMENT",
+      "edge": "BINDS_TO",
+      "inNode": "TYPE_PARAMETER"
+    },
+    {
+      "outNode": "TYPE_ARGUMENT",
+      "edge": "REF",
+      "inNode": "TYPE"
+    }
+  ],
+  "cpg:derivedEdges": [
+    {
+      "edge": "ALIAS_OF",
+      "sourceNode": "TYPE_DECL",
+      "sourceProperty": "ALIAS_TYPE_FULL_NAME",
+      "sourceCardinality": "optional",
+      "targetNode": "TYPE",
+      "targetProperty": "FULL_NAME",
+      "createdBy": "loader",
+      "frontendCreates": false
+    },
+    {
+      "edge": "INHERITS_FROM",
+      "sourceNode": "TYPE_DECL",
+      "sourceProperty": "INHERITS_FROM_TYPE_FULL_NAME",
+      "sourceCardinality": "list",
+      "targetNode": "TYPE",
+      "targetProperty": "FULL_NAME",
+      "targetCardinality": "atLeastOne",
+      "createdBy": "loader",
+      "frontendCreates": false
+    }
+  ],
+  "cpg:references": [
+    {
+      "sourceNode": "TYPE",
+      "sourceProperty": "TYPE_DECL_FULL_NAME",
+      "targetNode": "TYPE_DECL",
+      "targetProperty": "FULL_NAME",
+      "targetCardinality": "exactlyOne"
+    }
+  ]
+}
