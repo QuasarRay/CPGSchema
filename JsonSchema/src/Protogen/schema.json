@@ -1,0 +1,17 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Protogen/1",
+  "title": "Protogen",
+  "cpg:protoOptions": {
+    "pkg": "cpg",
+    "javaOuterClassname": "Cpg",
+    "javaPackage": "io.shiftleft.proto.cpg",
+    "goPackage": "github.com/ShiftLeftSecurity/proto/cpg",
+    "csharpNamespace": "io.shiftleft.proto.cpg",
+    "uncommonProtoEnumNameMappings": {
+      "Languages": "LANGUAGES",
+      "ControlStructureTypes": "CONTROL_STRUCTURE_TYPES",
+      "Frameworks": "FRAMEWORKS"
+    }
+  }
+}

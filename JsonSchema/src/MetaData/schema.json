@@ -1,0 +1,18 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/MetaData/1",
+  "title": "MetaData",
+  "description": "\nThe Meta Data Layer contains information about CPG creation. In particular,\nit indicates which language frontend generated the CPG and which overlays\nhave been applied. The layer consists of a single node - the Meta Data node -\nand language frontends MUST create this node. Overlay creators MUST edit\nthis node to indicate that a layer has been successfully applied in all\ncases where applying the layer more than once is prohibitive.\n",
+  "cpg:module": "MetaData",
+  "cpg:docIndex": 2,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base"
+  ],
+  "cpg:operations": [],
+  "cpg:reservedConstantIds": {
+    "Languages": [
+      16
+    ]
+  }
+}

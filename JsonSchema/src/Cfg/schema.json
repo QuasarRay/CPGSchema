@@ -1,0 +1,14 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Cfg/1",
+  "title": "Cfg",
+  "description": "\nThe Control Flow Graph Layer provides control flow graphs for each method. Control\nflow graphs are constructed by marking a sub set of the abstract syntax tree nodes\nas control flow nodes (`CFG_NODE`) and connecting these nodes via `CFG` edges.\nThe control flow graph models both the control flow within the calculation of an\nexpression as well as from expression to expression. The layer can be automatically\ngenerated from the syntax tree layer if only control structure types supported by\nthis specification are employed.\n",
+  "cpg:module": "Cfg",
+  "cpg:docIndex": 9,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Method",
+    "Ast"
+  ],
+  "cpg:operations": []
+}

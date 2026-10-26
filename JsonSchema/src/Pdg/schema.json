@@ -1,0 +1,14 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Pdg/1",
+  "title": "Pdg",
+  "description": "\n      The Program Dependence Graph Layer contains a program dependence graph for\neach method of the source program. A program dependence graph consists\nof a data dependence graph (DDG) and a control dependence graph (CDG),\ncreated by connecting nodes of the control flow graph via `REACHING_DEF`\nand `CDG` edges respectively.\n",
+  "cpg:module": "Pdg",
+  "cpg:docIndex": 11,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Method",
+    "Ast"
+  ],
+  "cpg:operations": []
+}

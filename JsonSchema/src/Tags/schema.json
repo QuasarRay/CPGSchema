@@ -1,0 +1,18 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Tags/1",
+  "title": "Tags",
+  "description": "\nThe Code Property Graph specification allows for tags to be attached\nto arbitrary nodes. Conceptually, this is similar to the creation of\nFinding nodes, however, tags are to be used for intermediate results\nrather than end-results that are to be reported to the user.\n",
+  "cpg:module": "Tags",
+  "cpg:docIndex": 17,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base",
+    "Type",
+    "Method",
+    "Ast",
+    "FileSystem",
+    "CallGraph"
+  ],
+  "cpg:operations": []
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Shortcuts/1",
+  "title": "Shortcuts",
+  "description": "\nThe Shortcuts Layer provides shortcut edges calculated to speed up\nsubsequent queries. Language frontends MUST NOT create shortcut edges.\n",
+  "cpg:module": "Shortcuts",
+  "cpg:docIndex": 16,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base",
+    "Method",
+    "Ast",
+    "Type",
+    "FileSystem"
+  ],
+  "cpg:operations": []
+}

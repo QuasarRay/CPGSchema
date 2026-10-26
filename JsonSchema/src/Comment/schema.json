@@ -1,0 +1,15 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Comment/1",
+  "title": "Comment",
+  "description": "",
+  "cpg:module": "Comment",
+  "cpg:docIndex": 12,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base",
+    "Ast",
+    "FileSystem"
+  ],
+  "cpg:operations": []
+}

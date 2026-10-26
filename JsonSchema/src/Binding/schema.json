@@ -1,0 +1,16 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Binding/1",
+  "title": "Binding",
+  "description": "\nWe use the concept of \"bindings\" to support resolving of\n(method-name, signature) pairs at type declarations (`TYPE_DECL`). For each\npair that we can resolve, we create a `BINDING` node that is connected the\nthe type declaration via an incoming `BINDS` edge. The `BINDING` node is\nconnected to the method it resolves to via an outgoing `REF` edge.\n",
+  "cpg:module": "Binding",
+  "cpg:docIndex": 19,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base",
+    "Type",
+    "Method",
+    "CallGraph"
+  ],
+  "cpg:operations": []
+}

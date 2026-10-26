@@ -1,0 +1,11 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Operators/1",
+  "title": "Operators",
+  "description": "\n\n",
+  "cpg:module": "Operators",
+  "cpg:docIndex": 17,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [],
+  "cpg:operations": []
+}

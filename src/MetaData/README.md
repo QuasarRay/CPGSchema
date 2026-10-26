@@ -1,3 +1,11 @@
+# Integrated native module
+
+Implementation milestone: **UNVERIFIED**. The production native implementation is now wired through this directory's `mod.rs` into the root `CPGSchema` package. Its independent JSON counterpart lives in `JsonSchema/src/MetaData/`. See the root `README.md` and `GRAPH_FORMAT.md` for current APIs and compilation usage.
+
+The remaining notes describe the earlier prototype files retained in this directory; their architecture and verification statements do not describe the integrated packages. Existing reference and verification material is preserved.
+
+---
+
 # MetaData — compile-time CPG JSON Schema dialect/vocabulary
 
 This bundle converts the standalone `MetaData.rs` builder model into a static

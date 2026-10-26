@@ -1,0 +1,14 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Type/1",
+  "title": "Type",
+  "description": "\nThe Type Layer contains information about type declarations, relations between\ntypes, and type instantiation and usage. In its current form, it allows modelling of\nparametrized types, type hierarchies and aliases.\n",
+  "cpg:module": "Type",
+  "cpg:docIndex": 6,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base",
+    "FileSystem"
+  ],
+  "cpg:operations": []
+}

@@ -1,3 +1,11 @@
+# Integrated native module
+
+Implementation milestone: **UNVERIFIED**. The production native implementation is now wired through this directory's `mod.rs` into the root `CPGSchema` package. Its independent JSON counterpart lives in `JsonSchema/src/Type/`. See the root `README.md` and `GRAPH_FORMAT.md` for current APIs and compilation usage.
+
+The remaining notes describe the earlier prototype files retained in this directory; their architecture and verification statements do not describe the integrated packages. Existing reference and verification material is preserved.
+
+---
+
 # Type — JSON Schema dialect/vocabulary + Rust semantics
 
 This is a direct declarative port of `Type.scala` using JSON Schema Draft 2020-12 plus a CPG-specific vocabulary implemented by `jsonschema` 0.60.1.

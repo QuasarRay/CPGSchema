@@ -1,0 +1,351 @@
+{
+  "type": "object",
+  "properties": {
+    "format": {
+      "const": "CPGSchemaGraph"
+    },
+    "formatVersion": {
+      "const": 1
+    },
+    "schemaRevision": {
+      "const": "d02d76ea5c9e3b398317d334228d7e8e78ab45aa"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/scalar"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/scalar"
+                  }
+                }
+              ]
+            }
+          },
+          "contained": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "properties"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "label": {
+            "type": "string"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/scalar"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/scalar"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "target",
+          "label",
+          "properties"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "format",
+    "formatVersion",
+    "schemaRevision",
+    "nodes",
+    "edges"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quasarray.github.io/CPGSchema/meta/graph/1",
+  "$defs": {
+    "scalar": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Boolean"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Byte"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Short"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Int"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Long"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Float"
+            },
+            "bits": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}$"
+            }
+          },
+          "required": [
+            "type",
+            "bits"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Double"
+            },
+            "bits": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{16}$"
+            }
+          },
+          "required": [
+            "type",
+            "bits"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Char"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "String"
+            },
+            "value": {
+              "type": "string"
+            },
+            "utf16": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65535
+              }
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": [
+                "value"
+              ],
+              "not": {
+                "required": [
+                  "utf16"
+                ]
+              }
+            },
+            {
+              "required": [
+                "utf16"
+              ],
+              "not": {
+                "required": [
+                  "value"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "NodeRef"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "List"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/scalar"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

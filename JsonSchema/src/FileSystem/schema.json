@@ -1,0 +1,13 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/FileSystem/1",
+  "title": "FileSystem",
+  "description": "\nCPGs are created from sets of files and the File System Layer describes the layout of\nthese files, that is, it provides information about source files\nand shared objects for source-based and machine-code-based frontends\nrespectively. The purpose of including this information in the CPG\nis to allow nodes of the graph to be mapped back to file system locations.\n",
+  "cpg:module": "FileSystem",
+  "cpg:docIndex": 3,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base"
+  ],
+  "cpg:operations": []
+}

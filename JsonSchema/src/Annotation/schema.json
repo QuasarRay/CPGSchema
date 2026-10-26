@@ -1,0 +1,17 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Annotation/1",
+  "title": "Annotation",
+  "description": "\nJava Annotation related CPG definitions.\n",
+  "cpg:module": "Annotation",
+  "cpg:docIndex": 20,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base",
+    "Method",
+    "Type",
+    "Ast",
+    "Shortcuts"
+  ],
+  "cpg:operations": []
+}

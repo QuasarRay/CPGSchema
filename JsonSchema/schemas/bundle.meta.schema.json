@@ -1,0 +1,86 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "const": "https://quasarray.github.io/CPGSchema/dialect/1"
+    },
+    "$id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "cpg:builder": {
+      "type": "object",
+      "properties": {
+        "domainShortName": {
+          "type": "string"
+        },
+        "basePackage": {
+          "type": "string"
+        },
+        "additionalTraversalsPackages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "domainShortName",
+        "basePackage",
+        "additionalTraversalsPackages"
+      ],
+      "additionalProperties": false
+    },
+    "cpg:composition": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cpg:modules": {
+      "type": "array",
+      "items": {
+        "$ref": "https://quasarray.github.io/CPGSchema/meta/module/1"
+      }
+    },
+    "cpg:propertyDefaults": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "https://quasarray.github.io/CPGSchema/meta/module/1#/$defs/scalar"
+      }
+    }
+  },
+  "required": [
+    "cpg:builder"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quasarray.github.io/CPGSchema/meta/bundle/1",
+  "oneOf": [
+    {
+      "required": [
+        "cpg:composition"
+      ],
+      "not": {
+        "required": [
+          "cpg:modules"
+        ]
+      }
+    },
+    {
+      "required": [
+        "cpg:modules"
+      ],
+      "not": {
+        "required": [
+          "cpg:composition"
+        ]
+      }
+    }
+  ]
+}

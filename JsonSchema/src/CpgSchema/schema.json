@@ -1,0 +1,73 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/CpgSchema/1",
+  "title": "CpgSchema",
+  "cpg:builder": {
+    "domainShortName": "Cpg",
+    "basePackage": "io.shiftleft.codepropertygraph.generated",
+    "additionalTraversalsPackages": [
+      "io.shiftleft"
+    ]
+  },
+  "cpg:composition": [
+    "Base",
+    "FileSystem",
+    "Namespace",
+    "Operators",
+    "Configuration",
+    "MetaData",
+    "Type",
+    "Method",
+    "Ast",
+    "CallGraph",
+    "Cfg",
+    "Dominators",
+    "Pdg",
+    "Shortcuts",
+    "Comment",
+    "Tags",
+    "Binding",
+    "Annotation",
+    "Finding",
+    "Hidden",
+    "ProtoSerialize"
+  ],
+  "cpg:propertyDefaults": {
+    "String": {
+      "type": "String",
+      "value": "<empty>"
+    },
+    "Boolean": {
+      "type": "Boolean",
+      "value": false
+    },
+    "Byte": {
+      "type": "Byte",
+      "value": "-1"
+    },
+    "Short": {
+      "type": "Short",
+      "value": "-1"
+    },
+    "Int": {
+      "type": "Int",
+      "value": "-1"
+    },
+    "Long": {
+      "type": "Long",
+      "value": "-1"
+    },
+    "Float": {
+      "type": "Float",
+      "bits": "00000000"
+    },
+    "Double": {
+      "type": "Double",
+      "bits": "0000000000000000"
+    },
+    "Char": {
+      "type": "Char",
+      "value": 63
+    }
+  }
+}

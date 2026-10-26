@@ -1,0 +1,17 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Ast/1",
+  "title": "Ast",
+  "description": "\nThe Abstract Syntax Tree (AST) Layer provides syntax trees for all compilation units.\nAll nodes of the tree inherit from the same base class (`AST_NODE`) and are connected\nto their child nodes via outgoing `AST` edges.\n\nSyntax trees are typed, that is, when possible, types for all expressions are stored\nin the tree. Moreover, common control structure types are defined in the specification,\nmaking it possible to translate trees into corresponding control flow graphs if only\nthese common control structure types are used, possibly by desugaring on the side of\nthe language frontend. For cases where this is not an option,\nthe AST specification provides means of storing language-dependent information in the\nAST that can be interpreted by language-dependent control flow construction passes.\n\nThis layer MUST be created by the frontend.\n\n",
+  "cpg:module": "Ast",
+  "cpg:docIndex": 7,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base",
+    "Namespace",
+    "Method",
+    "Type",
+    "FileSystem"
+  ],
+  "cpg:operations": []
+}

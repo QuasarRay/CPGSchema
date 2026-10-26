@@ -1,0 +1,11 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Base/1",
+  "title": "Base",
+  "description": "\n",
+  "cpg:module": "Base",
+  "cpg:docIndex": 2147483647,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [],
+  "cpg:operations": []
+}

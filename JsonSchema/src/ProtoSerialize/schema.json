@@ -1,0 +1,13 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/ProtoSerialize/1",
+  "title": "ProtoSerialize",
+  "description": "\n\n",
+  "cpg:module": "ProtoSerialize",
+  "cpg:docIndex": 2147483647,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Ast"
+  ],
+  "cpg:operations": []
+}

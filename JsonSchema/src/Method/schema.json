@@ -1,0 +1,15 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Method/1",
+  "title": "Method",
+  "description": "\nThe Method Layer contains declarations of methods, functions, and procedures.\nInput parameters and output parameters (including return parameters) are\nrepresented, however, method contents is not present in this layer.\n",
+  "cpg:module": "Method",
+  "cpg:docIndex": 5,
+  "cpg:providedByFrontend": true,
+  "cpg:imports": [
+    "Base",
+    "Type",
+    "FileSystem"
+  ],
+  "cpg:operations": []
+}

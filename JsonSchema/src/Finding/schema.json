@@ -1,0 +1,13 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Finding/1",
+  "title": "Finding",
+  "description": "\nWe allow findings (e.g., potential vulnerabilities, notes on dangerous practices) to\nbe stored in the Findings Layer.\n",
+  "cpg:module": "Finding",
+  "cpg:docIndex": 15,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base"
+  ],
+  "cpg:operations": []
+}

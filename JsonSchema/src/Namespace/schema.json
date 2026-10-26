@@ -1,0 +1,14 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Namespace/1",
+  "title": "Namespace",
+  "description": "\nMany programming languages allow code to be structured into namespaces. The Namespace\nLayer makes these namespaces explicit and associates program constructs with the\nnamespaces they are defined in.\n",
+  "cpg:module": "Namespace",
+  "cpg:docIndex": 4,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base",
+    "FileSystem"
+  ],
+  "cpg:operations": []
+}

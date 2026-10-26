@@ -1,0 +1,906 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://quasarray.github.io/CPGSchema/meta/vocabulary/1",
+  "type": [
+    "object",
+    "boolean"
+  ],
+  "properties": {
+    "cpg:module": {
+      "type": "string"
+    },
+    "cpg:docIndex": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "cpg:providedByFrontend": {
+      "type": "boolean"
+    },
+    "cpg:imports": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "cpg:operations": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "property"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "name": {
+                "type": "string"
+              },
+              "valueType": {
+                "enum": [
+                  "Boolean",
+                  "String",
+                  "Byte",
+                  "Short",
+                  "Int",
+                  "Long",
+                  "Float",
+                  "Double",
+                  "List",
+                  "Char",
+                  "NodeRef",
+                  "Unknown"
+                ]
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "id",
+              "name",
+              "valueType"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "node"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "name": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "nodeBase"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "name": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "edge"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "name": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "id",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "constants"
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "category": {
+                "type": "string"
+              },
+              "entries": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "valueType": {
+                      "enum": [
+                        "Boolean",
+                        "String",
+                        "Byte",
+                        "Short",
+                        "Int",
+                        "Long",
+                        "Float",
+                        "Double",
+                        "List",
+                        "Char",
+                        "NodeRef",
+                        "Unknown"
+                      ]
+                    },
+                    "comment": {
+                      "type": "string"
+                    },
+                    "protoId": {
+                      "oneOf": [
+                        {
+                          "type": "integer",
+                          "minimum": -2147483648,
+                          "maximum": 2147483647
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "$protoId": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "$protoId"
+                          ],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value",
+                    "valueType"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "op",
+              "id",
+              "category",
+              "entries"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "protoId"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "value": {
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "$protoId": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "$protoId"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "mandatory"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "default": {
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/scalar"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "$cpgDefault": {
+                        "enum": [
+                          "Boolean",
+                          "String",
+                          "Byte",
+                          "Short",
+                          "Int",
+                          "Long",
+                          "Float",
+                          "Double",
+                          "List",
+                          "Char",
+                          "NodeRef",
+                          "Unknown"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "$cpgDefault"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "default"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "asList"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              }
+            },
+            "required": [
+              "op",
+              "target"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "addProperty"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+                }
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "references"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "addProperties"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+                }
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "references"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "extendz"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+                }
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "references"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "primaryKey"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "reference": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "reference"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "withProperty"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "reference": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "reference"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "starterName"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "withDefaultAccessorName"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "relation"
+              },
+              "source": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "edge": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "destination": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "cardinalityOut": {
+                "enum": [
+                  "List",
+                  "ZeroOrOne",
+                  "One"
+                ]
+              },
+              "cardinalityIn": {
+                "enum": [
+                  "List",
+                  "ZeroOrOne",
+                  "One"
+                ]
+              },
+              "stepNameOut": {
+                "type": "string"
+              },
+              "stepNameIn": {
+                "type": "string"
+              },
+              "stepNameOutDoc": {
+                "type": "string"
+              },
+              "stepNameInDoc": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "source",
+              "edge",
+              "destination"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "op": {
+                "const": "contained"
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "node": {
+                "type": "string",
+                "pattern": "^(AnyNode|[A-Za-z][A-Za-z0-9]*::[A-Za-z][A-Za-z0-9]*)$"
+              },
+              "localName": {
+                "type": "string"
+              },
+              "cardinality": {
+                "enum": [
+                  "List",
+                  "ZeroOrOne",
+                  "One"
+                ]
+              },
+              "default": {
+                "type": "null"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "op",
+              "target",
+              "node",
+              "localName",
+              "cardinality"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "cpg:reservedConstantIds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "uniqueItems": true
+      }
+    },
+    "cpg:builder": {
+      "type": "object",
+      "properties": {
+        "domainShortName": {
+          "type": "string"
+        },
+        "basePackage": {
+          "type": "string"
+        },
+        "additionalTraversalsPackages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "domainShortName",
+        "basePackage",
+        "additionalTraversalsPackages"
+      ],
+      "additionalProperties": false
+    },
+    "cpg:composition": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "cpg:modules": {
+      "type": "array",
+      "items": {
+        "$ref": "https://quasarray.github.io/CPGSchema/meta/module/1"
+      }
+    },
+    "cpg:propertyDefaults": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "https://quasarray.github.io/CPGSchema/meta/module/1#/$defs/scalar"
+      }
+    },
+    "cpg:schema": {
+      "type": "boolean"
+    },
+    "cpg:graph": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "type": "object"
+        },
+        "stage": {
+          "enum": [
+            "Frontend",
+            "Materialized"
+          ]
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "schema",
+        "stage",
+        "layers"
+      ],
+      "additionalProperties": false
+    },
+    "cpg:protoIds": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": -2147483648,
+        "maximum": 2147483647
+      }
+    },
+    "cpg:protoOptions": {
+      "type": "object"
+    }
+  },
+  "$defs": {
+    "scalar": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Boolean"
+            },
+            "value": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Byte"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Short"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Int"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Long"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^(0|-[1-9][0-9]*|[1-9][0-9]*)$"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Float"
+            },
+            "bits": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{8}$"
+            }
+          },
+          "required": [
+            "type",
+            "bits"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Double"
+            },
+            "bits": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{16}$"
+            }
+          },
+          "required": [
+            "type",
+            "bits"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "Char"
+            },
+            "value": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 65535
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "String"
+            },
+            "value": {
+              "type": "string"
+            },
+            "utf16": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 65535
+              }
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": [
+                "value"
+              ],
+              "not": {
+                "required": [
+                  "utf16"
+                ]
+              }
+            },
+            {
+              "required": [
+                "utf16"
+              ],
+              "not": {
+                "required": [
+                  "value"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "NodeRef"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "const": "List"
+            },
+            "value": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/scalar"
+              }
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

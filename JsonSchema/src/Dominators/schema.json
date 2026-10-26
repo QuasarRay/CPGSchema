@@ -1,0 +1,14 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Dominators/1",
+  "title": "Dominators",
+  "description": "\nThe Dominators Layer provides dominator- and post-dominator trees for all methods.\nIt is constructed automatically from the control flow graph layer and is in turn\nused to automatically construct control dependence relations of the PDG layer.\n",
+  "cpg:module": "Dominators",
+  "cpg:docIndex": 10,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Method",
+    "Ast"
+  ],
+  "cpg:operations": []
+}

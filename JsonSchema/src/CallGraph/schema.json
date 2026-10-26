@@ -1,0 +1,14 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/CallGraph/1",
+  "title": "CallGraph",
+  "description": "\nThe Call Graph Layer represents call relations between methods.\n",
+  "cpg:module": "CallGraph",
+  "cpg:docIndex": 8,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Method",
+    "Ast"
+  ],
+  "cpg:operations": []
+}

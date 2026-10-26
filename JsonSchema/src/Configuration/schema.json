@@ -1,0 +1,13 @@
+{
+  "$schema": "https://quasarray.github.io/CPGSchema/dialect/1",
+  "$id": "https://quasarray.github.io/CPGSchema/modules/Configuration/1",
+  "title": "Configuration",
+  "description": "\nThe code property graph specification currently does not contain\nschema elements for the representation of configuration files in\na structured format, however, it does allow configuration files\nto be included verbatim in the graph to enable language-/framework-\nspecific passes to access them. This layer provides the necessary\nschema elements for this basic support of configuration files.\n",
+  "cpg:module": "Configuration",
+  "cpg:docIndex": 18,
+  "cpg:providedByFrontend": false,
+  "cpg:imports": [
+    "Base"
+  ],
+  "cpg:operations": []
+}
